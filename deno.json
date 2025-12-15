@@ -1,0 +1,17 @@
+{
+  "name": "@macil/z3-solver",
+  "version": "0.1.0",
+  "license": "MIT",
+  "exports": "./node.ts",
+  "tasks": {
+  },
+  "test": {
+    "permissions": {
+      "read": ["./z3-built.cjs"]
+    }
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1",
+    "z3-solver": "npm:z3-solver@4.15.4"
+  }
+}
