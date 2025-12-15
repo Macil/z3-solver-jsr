@@ -76,7 +76,7 @@ if (ENVIRONMENT_IS_NODE) {
   // builds, `-sENVIRONMENT=node` emits a static import declaration instead.
   // TODO: Swap all `require()`'s with `import()`'s?
 
-  global.Worker = worker_threads.Worker;
+  // global.Worker = worker_threads.Worker;
   ENVIRONMENT_IS_WORKER = !worker_threads.isMainThread;
   // Under node we set `workerData` to `em-pthread` to signal that the worker
   // is hosting a pthread.
@@ -1624,8 +1624,8 @@ var ASM_CONSTS = {
         };
 
         if (ENVIRONMENT_IS_NODE) {
-          worker.on('message', (data) => worker.onmessage({ data: data }));
-          worker.on('error', (e) => worker.onerror(e));
+          // worker.on('message', (data) => worker.onmessage({ data: data }));
+          // worker.on('error', (e) => worker.onerror(e));
         }
 
         assert(wasmMemory instanceof WebAssembly.Memory, 'WebAssembly memory should have been loaded by now!');
@@ -1669,6 +1669,7 @@ var ASM_CONSTS = {
           // This is the way that we signal to the Web Worker that it is hosting
           // a pthread.
           'name': 'em-pthread-' + PThread.nextWorkerID,
+          type: 'module',
         };
         var pthreadMainJs = _scriptName;
         // We can't use makeModuleReceiveWithVar here since we want to also
