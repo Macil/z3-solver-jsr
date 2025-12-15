@@ -42,19 +42,19 @@ export interface Z3HighLevel extends Z3HighLevel_ {
  * The main entry point to the Z3 API
  *
  * ```typescript
- * import { init } from 'z3-solver';
+ * import { init } from "@macil/z3-solver";
  *
  * const { Context } = await init();
- * const { Solver, Int } = new Context('main');
+ * const { Solver, Int } = new Context("main");
  *
- * const x = Int.const('x');
- * const y = Int.const('y');
+ * const x = Int.const("x");
+ * const y = Int.const("y");
  *
  * const solver = new Solver();
  * solver.add(x.add(2).le(y.sub(10))); // x + 2 <= y - 10
  *
- * if (await solver.check() !== 'sat') {
- *   throw new Error("couldn't find a solution")
+ * if (await solver.check() !== "sat") {
+ *   throw new Error("couldn't find a solution");
  * }
  * const model = solver.model();
  *
