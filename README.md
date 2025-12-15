@@ -1,4 +1,4 @@
-# @macil/z3-solver
+# @macil/z3-solver [![JSR](https://jsr.io/badges/@macil/z3-solver)](https://jsr.io/@macil/z3-solver)
 
 This project is a JSR package that wraps the
 [z3-solver](https://www.npmjs.com/package/z3-solver) npm package to add
