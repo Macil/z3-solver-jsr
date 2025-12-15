@@ -27,6 +27,9 @@ const model = solver.model();
 
 console.log(`x=${model.get(x)}, y=${model.get(y)}`);
 // x=0, y=12
+
+// Explicit exit needed because of https://github.com/denoland/deno/issues/31612
+Deno.exit();
 ```
 
 ## Compatibility
