@@ -3,8 +3,9 @@
 This project is a JSR package that wraps the
 [z3-solver](https://www.npmjs.com/package/z3-solver) npm package to add
 compatibility with Deno. This package works around
-[issues](https://github.com/denoland/deno/issues/17171) preventing the direct
-use of the original package in Deno.
+[an issue](https://github.com/denoland/deno/issues/17171) preventing the direct
+use of the original package in Deno. This package is expected to become
+unnecessary once that issue is resolved.
 
 ## Example
 
