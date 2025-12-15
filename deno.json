@@ -7,7 +7,11 @@
   },
   "test": {
     "permissions": {
-      "read": ["./z3-built.js"]
+      "read": [
+        "./z3-built.js",
+        "./z3-built-worker.ts",
+        "./z3-built-worker-init.ts"
+      ]
     }
   },
   "imports": {

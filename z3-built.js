@@ -1,7 +1,6 @@
 // deno-fmt-ignore-file
 // deno-lint-ignore-file
 // based on https://cdn.jsdelivr.net/npm/z3-solver@4.15.4/build/z3-built.js
-import worker_threads from "node:worker_threads";
 import fs from "node:fs";
 import nodePath from "node:path";
 const __dirname = "";
@@ -9,7 +8,7 @@ const __dirname = "";
 var initZ3 = (() => {
   // var _scriptName = typeof document != 'undefined' ? document.currentScript?.src : undefined;
   // if (typeof __filename != 'undefined') _scriptName = _scriptName || __filename;
-  const _scriptName = import.meta.url;
+  const _scriptName = import.meta.resolve("./z3-built-worker.ts");
   return (
 function(moduleArg = {}) {
   var moduleRtn;
@@ -77,10 +76,10 @@ if (ENVIRONMENT_IS_NODE) {
   // TODO: Swap all `require()`'s with `import()`'s?
 
   // global.Worker = worker_threads.Worker;
-  ENVIRONMENT_IS_WORKER = !worker_threads.isMainThread;
+  // ENVIRONMENT_IS_WORKER = !worker_threads.isMainThread;
   // Under node we set `workerData` to `em-pthread` to signal that the worker
   // is hosting a pthread.
-  ENVIRONMENT_IS_PTHREAD = ENVIRONMENT_IS_WORKER && worker_threads['workerData'] == 'em-pthread'
+  // ENVIRONMENT_IS_PTHREAD = ENVIRONMENT_IS_WORKER && worker_threads['workerData'] == 'em-pthread'
 }
 
 // --pre-jses are emitted after the Module integration code, so that they can
@@ -462,11 +461,11 @@ if (ENVIRONMENT_IS_PTHREAD) {
     globalThis.self = globalThis;
 
     // Deno already implements the following behavior so we must not doubly implement it
-    if (!globalThis.postMessage) {
-      const parentPort = worker_threads['parentPort'];
-      parentPort.on('message', (msg) => globalThis.onmessage?.({ data: msg }));
-      globalThis.postMessage = (msg) => parentPort['postMessage'](msg);
-    }
+    // if (!globalThis.postMessage) {
+    //   const parentPort = worker_threads['parentPort'];
+    //   parentPort.on('message', (msg) => globalThis.onmessage?.({ data: msg }));
+    //   globalThis.postMessage = (msg) => parentPort['postMessage'](msg);
+    // }
   }
 
   // Thread-local guard variable for one-time init of the JS state
@@ -1343,7 +1342,7 @@ var ASM_CONSTS = {
         // so that its existence does not prevent Node.js from exiting.  This
         // has no effect if the worker is already weakly referenced (e.g. if
         // this worker was previously idle/unused).
-        worker.unref();
+        // worker.unref();
       }
       // Ask the worker to start executing its pthread entry point function.
       worker.postMessage(msg, threadParams.transferList);
@@ -7932,9 +7931,10 @@ for (const prop of Object.keys(Module)) {
 // else if (typeof define === 'function' && define['amd'])
 //   define([], () => initZ3);
 export default initZ3;
-var isPthread = globalThis.self?.name?.startsWith('em-pthread');
-var isNode = typeof globalThis.process?.versions?.node == 'string';
-if (isNode) isPthread = worker_threads.workerData === 'em-pthread'
+// var isPthread = globalThis.self?.name?.startsWith('em-pthread');
+// var isNode = typeof globalThis.process?.versions?.node == 'string';
+// if (isNode) isPthread = worker_threads.workerData === 'em-pthread'
+const isPthread = globalThis.__isPthread === true;
 
 // When running as a pthread, construct a new instance on startup
 isPthread && initZ3();
