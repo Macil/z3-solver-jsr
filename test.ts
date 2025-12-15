@@ -3,7 +3,7 @@ import { init } from "./node.ts";
 
 Deno.test("tsdoc example", async () => {
   const { Context } = await init();
-  const { Solver, Int, isIntVal } = /*new*/ Context("main");
+  const { Solver, Int, isIntVal } = new Context("main");
 
   const x = Int.const("x");
   const y = Int.const("y");
