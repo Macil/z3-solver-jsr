@@ -1,4 +1,4 @@
-import initModule_ from "./z3-built.cjs";
+import initModule_ from "./z3-built.js";
 
 // @ts-types="./wasmModule.d.ts"
 import { wasmModule } from "./wasmModule.js";

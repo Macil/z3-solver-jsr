@@ -7,7 +7,7 @@
   },
   "test": {
     "permissions": {
-      "read": ["./z3-built.cjs"]
+      "read": ["./z3-built.js"]
     }
   },
   "imports": {

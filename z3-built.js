@@ -1,9 +1,15 @@
 // deno-fmt-ignore-file
 // deno-lint-ignore-file
 // based on https://cdn.jsdelivr.net/npm/z3-solver@4.15.4/build/z3-built.js
+import worker_threads from "node:worker_threads";
+import fs from "node:fs";
+import nodePath from "node:path";
+const __dirname = "";
+
 var initZ3 = (() => {
-  var _scriptName = typeof document != 'undefined' ? document.currentScript?.src : undefined;
-  if (typeof __filename != 'undefined') _scriptName = _scriptName || __filename;
+  // var _scriptName = typeof document != 'undefined' ? document.currentScript?.src : undefined;
+  // if (typeof __filename != 'undefined') _scriptName = _scriptName || __filename;
+  const _scriptName = import.meta.url;
   return (
 function(moduleArg = {}) {
   var moduleRtn;
@@ -70,7 +76,6 @@ if (ENVIRONMENT_IS_NODE) {
   // builds, `-sENVIRONMENT=node` emits a static import declaration instead.
   // TODO: Swap all `require()`'s with `import()`'s?
 
-  var worker_threads = require('worker_threads');
   global.Worker = worker_threads.Worker;
   ENVIRONMENT_IS_WORKER = !worker_threads.isMainThread;
   // Under node we set `workerData` to `em-pthread` to signal that the worker
@@ -160,11 +165,6 @@ if (ENVIRONMENT_IS_NODE) {
   if (numericVersion < 160000) {
     throw new Error('This emscripten-generated code requires node v16.0.0 (detected v' + nodeVersion + ')');
   }
-
-  // These modules will usually be used on Node.js. Load them eagerly to avoid
-  // the complexity of lazy-loading.
-  var fs = require('fs');
-  var nodePath = require('path');
 
   scriptDirectory = __dirname + '/';
 
@@ -2234,27 +2234,27 @@ var ASM_CONSTS = {
           // Return the original view to match modern native implementations.
           view
         );
-      } else
-      if (ENVIRONMENT_IS_NODE) {
-        // for nodejs with or without crypto support included
-        try {
-          var crypto_module = require('crypto');
-          var randomFillSync = crypto_module['randomFillSync'];
-          if (randomFillSync) {
-            // nodejs with LTS crypto support
-            return (view) => crypto_module['randomFillSync'](view);
-          }
-          // very old nodejs with the original crypto API
-          var randomBytes = crypto_module['randomBytes'];
-          return (view) => (
-            view.set(randomBytes(view.byteLength)),
-            // Return the original view to match modern native implementations.
-            view
-          );
-        } catch (e) {
-          // nodejs doesn't have crypto support
-        }
-      }
+      } // else
+      // if (ENVIRONMENT_IS_NODE) {
+      //   // for nodejs with or without crypto support included
+      //   try {
+      //     var crypto_module = require('crypto');
+      //     var randomFillSync = crypto_module['randomFillSync'];
+      //     if (randomFillSync) {
+      //       // nodejs with LTS crypto support
+      //       return (view) => crypto_module['randomFillSync'](view);
+      //     }
+      //     // very old nodejs with the original crypto API
+      //     var randomBytes = crypto_module['randomBytes'];
+      //     return (view) => (
+      //       view.set(randomBytes(view.byteLength)),
+      //       // Return the original view to match modern native implementations.
+      //       view
+      //     );
+      //   } catch (e) {
+      //     // nodejs doesn't have crypto support
+      //   }
+      // }
       // we couldn't find a proper implementation, as Math.random() is not suitable for /dev/random, see emscripten-core/emscripten/pull/7096
       abort('no cryptographic support found for randomDevice. consider polyfilling it if you want to use something insecure like Math.random(), e.g. put this in a --pre-js: var crypto = { getRandomValues: (array) => { for (var i = 0; i < array.length; i++) array[i] = (Math.random()*256)|0 } };');
     };
@@ -5301,7 +5301,7 @@ var ASM_CONSTS = {
   var _emscripten_get_now = () => performance.timeOrigin + performance.now();
 
   var _emscripten_num_logical_cores = () =>
-      ENVIRONMENT_IS_NODE ? require('os').cpus().length :
+      // ENVIRONMENT_IS_NODE ? require('os').cpus().length :
       navigator['hardwareConcurrency'];
 
 
@@ -7926,13 +7926,14 @@ for (const prop of Object.keys(Module)) {
 }
 );
 })();
-if (typeof exports === 'object' && typeof module === 'object')
-  module.exports = initZ3;
-else if (typeof define === 'function' && define['amd'])
-  define([], () => initZ3);
+// if (typeof exports === 'object' && typeof module === 'object')
+//   module.exports = initZ3;
+// else if (typeof define === 'function' && define['amd'])
+//   define([], () => initZ3);
+export default initZ3;
 var isPthread = globalThis.self?.name?.startsWith('em-pthread');
 var isNode = typeof globalThis.process?.versions?.node == 'string';
-if (isNode) isPthread = require('worker_threads').workerData === 'em-pthread'
+if (isNode) isPthread = worker_threads.workerData === 'em-pthread'
 
 // When running as a pthread, construct a new instance on startup
 isPthread && initZ3();
