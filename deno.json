@@ -1,6 +1,6 @@
 {
   "name": "@macil/z3-solver",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "exports": "./node.ts",
   "tasks": {
