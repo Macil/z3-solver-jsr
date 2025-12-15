@@ -16,7 +16,7 @@ export * from "z3-solver/build/low-level/types.__GENERATED__.js";
 
 // Include patch to ContextCtor type from https://github.com/Z3Prover/z3/pull/8073
 import type { Context } from "z3-solver/build/high-level/index.js";
-/** @hidden */
+/** @ignore */
 export interface ContextCtor {
   <Name extends string>(
     name: Name,
@@ -29,6 +29,7 @@ export interface ContextCtor {
     options?: Record<string, any>,
   ): Context<Name>;
 }
+/** @ignore */
 export interface Z3HighLevel extends Z3HighLevel_ {
   /**
    * Use this to create new contexts
